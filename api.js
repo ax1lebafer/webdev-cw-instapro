@@ -1,5 +1,5 @@
-// Замени на свой, чтобы получить независимый от других набор данных.
-// "боевая" версия инстапро лежит в ключе prod
+import { getToken } from './index.js';
+
 const personalKey = 'ax1lebafer';
 const baseHost = 'https://webdev-hw-api.vercel.app';
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
@@ -23,26 +23,53 @@ export function getPosts({ token }) {
     });
 }
 
-export function getUserPosts({ id, token }) {
-  return fetch(`${postsHost}//user-posts/:${id}`, {
+export function getUserPosts({ data }) {
+  return fetch(postsHost + `/user-posts/${data.userId}`, {
     method: 'GET',
     headers: {
-      Authorization: token,
+      Authorization: getToken(),
     },
   })
     .then((response) => {
-      if (response.status === 401) {
-        throw new Error('Нет авторизации');
-      }
       return response.json();
     })
-    .then((responseData) => {
-      // TODO: Узнать в каком ключе лежат посты
-      console.log(responseData);
+    .then((data) => {
+      return data.posts;
     });
 }
 
-export function uploadPost({ token, description, imageUrl }) {
+export function like({ posts, index }) {
+  return fetch(postsHost + `/${posts[index].id}/like`, {
+    method: 'POST',
+    body: JSON.stringify({
+      likes: { id: posts[index].user.id, name: posts[index].user.name },
+      isLiked: posts.isLiked,
+    }),
+    headers: {
+      Authorization: getToken(),
+    },
+  }).then((response) => {
+    return response.json();
+  });
+}
+
+export function disLike({ posts, index }) {
+  return fetch(postsHost + `/${posts[index].id}/dislike`, {
+    method: 'POST',
+    body: JSON.stringify({
+      likes: { id: posts[index].user.id, name: posts[index].user.name },
+      isLiked: posts.isLiked,
+    }),
+    headers: {
+      Authorization: getToken(),
+    },
+  }).then((response) => {
+    return response.json();
+  });
+}
+
+export function addPost({ description, imageUrl }) {
+  console.log(description, imageUrl);
   return fetch(postsHost, {
     method: 'POST',
     body: JSON.stringify({
@@ -50,18 +77,8 @@ export function uploadPost({ token, description, imageUrl }) {
       imageUrl,
     }),
     headers: {
-      Authorization: token,
+      Authorization: getToken(),
     },
-  }).then((response) => {
-    if (response.status === 400) {
-      throw new Error('Не верный запрос');
-    }
-
-    if (response.status === 401) {
-      throw new Error('Нет авторизации');
-    }
-
-    return response.json();
   });
 }
 
