@@ -2,8 +2,8 @@ import { USER_POSTS_PAGE } from '../routes.js';
 import { renderHeaderComponent } from './header-component.js';
 import { posts, getToken, goToPage } from '../index.js';
 import { sanitize } from '../helpers.js';
-import { like, disLike } from "../api.js";
-import { formatDistanceToNow } from "date-fns";
+import { like, disLike } from '../api.js';
+import { formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export function renderPostsPageComponent({ appEl }) {
@@ -38,7 +38,7 @@ export function renderPostsPageComponent({ appEl }) {
       <li class="post">
         <div class="post-header" data-user-id="${post.user.id}">
             <img src="${post.user.imageUrl}" class="post-header__user-image">
-            <p class="post-header__user-name">${post.user.name}</p>
+            <p class="post-header__user-name">${sanitize(post.user.name)}</p>
         </div>
         <div class="post-image-container">
           <img class="post-image" src="${post.imageUrl}">
@@ -53,7 +53,7 @@ export function renderPostsPageComponent({ appEl }) {
           </p>
         </div>
         <p class="post-text">
-          <span class="user-name">${post.user.name}</span>
+          <span class="user-name">${sanitize(post.user.name)}</span>
           ${post.description}
         </p>
         <p class="post-date">
@@ -80,6 +80,7 @@ export function renderPostsPageComponent({ appEl }) {
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', () => {
       if (getToken() === undefined) {
+        alert('Ставить лайки могут только авторизованные пользователи');
         return (likeButton.disabled = true);
       } else {
         likeButton.disabled = false;

@@ -1,12 +1,13 @@
+import { addPost } from '../api.js';
 import { sanitize } from '../helpers.js';
+import { goToPage } from '../index.js';
 import { renderHeaderComponent } from './header-component.js';
 import { renderUploadImageComponent } from './upload-image-component.js';
 
-export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
+export function renderAddPostPageComponent({ appEl }) {
   let imageUrl = '';
 
   const render = () => {
-    // TODO: Реализовать страницу добавления поста
     const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
@@ -37,25 +38,38 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       element: document.querySelector('.header-container'),
     });
 
-    renderUploadImageComponent({
-      element: appEl.querySelector('.upload-image-container'),
-      onImageUrlChange(newImageUrl) {
-        if (!newImageUrl.trim()) {
-          alert('Загрузите фото');
-          return;
-        }
+    const uploadImageContainer = appEl.querySelector('.upload-image-container');
 
-        imageUrl = newImageUrl.trim();
-      },
-    });
-
-    const descriptionInputElement = document.querySelector('input');
+    if (uploadImageContainer) {
+      renderUploadImageComponent({
+        element: appEl.querySelector('.upload-image-container'),
+        onImageUrlChange(newImageUrl) {
+          imageUrl = newImageUrl;
+        },
+      });
+    }
 
     document.getElementById('add-button').addEventListener('click', () => {
-      onAddPostClick({
-        description: sanitize(descriptionInputElement.value),
+      const description = document.querySelector('.textarea').value;
+
+      if (!imageUrl) {
+        alert('Не выбрана фотография');
+        return;
+      }
+
+      if (!description) {
+        alert('Нужно добавить описание');
+        return;
+      }
+
+      console.log(description, imageUrl);
+
+      addPost({
+        description: sanitize(description),
         imageUrl: imageUrl,
       });
+
+      goToPage(POSTS_PAGE);
     });
   };
 
