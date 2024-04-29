@@ -6,7 +6,6 @@ import { formatDistance } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export function renderPostsPageComponent({ appEl }) {
-
   const postsHtml = posts
     .map((post) => {
       return `
