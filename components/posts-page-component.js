@@ -34,34 +34,34 @@ export function renderPostsPageComponent({ appEl }) {
       });
 
       return `
-    <ul class="posts">
-      <li class="post">
-        <div class="post-header" data-user-id="${post.user.id}">
-            <img src="${post.user.imageUrl}" class="post-header__user-image">
-            <p class="post-header__user-name">${sanitize(post.user.name)}</p>
-        </div>
-        <div class="post-image-container">
-          <img class="post-image" src="${post.imageUrl}">
-        </div>
-        <div class="post-likes">
-          <button data-post-id="${index}" class="like-button">
-            <img style="${post.isLiked === false ? 'display: block' : 'display: none'}" src="./assets/images/like-not-active.svg">
-            <img style="${post.isLiked === true ? 'display: block' : 'display: none'}" src="./assets/images/like-active.svg">
-          </button>
-          <p class="post-likes-text">
-            ${likersRenderApp('')}
-          </p>
-        </div>
-        <p class="post-text">
-          <span class="user-name">${sanitize(post.user.name)}</span>
-          ${post.description}
-        </p>
-        <p class="post-date">
-          ${createdTimeToNow} назад
-        </p>
-      </li>
-      <br>
-    </ul>`;
+        <ul class="posts">
+          <li class="post">
+            <div class="post-header" data-user-id="${post.user.id}">
+                <img src="${post.user.imageUrl}" class="post-header__user-image">
+                <p class="post-header__user-name">${sanitize(post.user.name)}</p>
+            </div>
+            <div class="post-image-container">
+              <img class="post-image" src="${post.imageUrl}">
+            </div>
+            <div class="post-likes">
+              <button data-post-id="${index}" class="like-button">
+                <img style="${post.isLiked === false ? 'display: block' : 'display: none'}" src="./assets/images/like-not-active.svg">
+                <img style="${post.isLiked === true ? 'display: block' : 'display: none'}" src="./assets/images/like-active.svg">
+              </button>
+              <p class="post-likes-text">
+                ${likersRenderApp('')}
+              </p>
+            </div>
+            <p class="post-text">
+              <span class="user-name">${sanitize(post.user.name)}</span>
+              ${sanitize(post.description)}
+            </p>
+            <p class="post-date">
+              ${createdTimeToNow} назад
+            </p>
+          </li>
+          <br>
+        </ul>`;
     })
     .join('');
 
@@ -109,7 +109,6 @@ export function renderPostsPageComponent({ appEl }) {
   for (let userEl of document.querySelectorAll('.post-header')) {
     userEl.disabled = false;
     userEl.addEventListener('click', () => {
-      console.log(userEl.dataset.userId);
       goToPage(USER_POSTS_PAGE, {
         userId: userEl.dataset.userId,
       });

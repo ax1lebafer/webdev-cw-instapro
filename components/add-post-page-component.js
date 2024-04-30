@@ -1,7 +1,7 @@
 import { addPost } from '../api.js';
 import { sanitize } from '../helpers.js';
 import { goToPage } from '../index.js';
-import { POSTS_PAGE } from "../routes.js";
+import { POSTS_PAGE } from '../routes.js';
 import { renderHeaderComponent } from './header-component.js';
 import { renderUploadImageComponent } from './upload-image-component.js';
 
